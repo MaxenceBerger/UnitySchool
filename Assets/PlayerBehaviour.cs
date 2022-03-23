@@ -6,7 +6,11 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private Transform _playerTransform;
+    private Transform _playerTransform;    
+    
+    [SerializeField]
+    private float _movementForce = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,24 +20,30 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 direction = Vector3.zero;
+
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            _playerTransform.position += new Vector3(-0.1f, 0, 0);
+            direction += new Vector3(-0.1f, 0, 0);
         }
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            _playerTransform.position += new Vector3(0.1f, 0, 0);
+            direction += new Vector3(0.1f, 0, 0);
         }
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            _playerTransform.position += new Vector3(0, 0.1f, 0);
+            direction += new Vector3(0, 0.1f, 0);
         }
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            _playerTransform.position += new Vector3(0, -0.1f, 0);
+            direction += new Vector3(0, -0.1f, 0);
         }
+
+        direction.Normalize();
+
+        _playerTransform.position += direction * _movementForce * Time.deltaTime;
     }
 }
