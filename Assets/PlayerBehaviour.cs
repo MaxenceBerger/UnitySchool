@@ -6,44 +6,73 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private Transform _playerTransform;    
-    
+    private Rigidbody2D _playerRB;
     [SerializeField]
-    private float _movementForce = 5;
+    private float _movementForce = 100f;
+    [SerializeField]
+    private float _jumpForce = 100f;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        Debug.Log("Hello world!");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void OnEnable()
+    {
+        Debug.Log("Je m'active!");
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        Vector3 direction = Vector3.zero;
+        //On traite désormais à part le mouvement vertical (en partie géré par le moteur physique)
+        float horizontalMovement = 0;
+        float verticalMovement = 0;
 
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            verticalMovement += _jumpForce;
+        }
+        //Plus besoin de normaliser, on pourrait utiliser une direction à 1 ou -1 en tant que multiplicateur,
+        //mais c'est plus rapide de directement déterminer le mouvement
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            direction += new Vector3(-0.1f, 0, 0);
+            horizontalMovement -= _movementForce;
         }
-
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            direction += new Vector3(0.1f, 0, 0);
+            horizontalMovement += _movementForce;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            direction += new Vector3(0, 0.1f, 0);
-        }
+        //Définir directement le y de la vélocité override ce que Unity calcule avec la gravité.
+        //_playerRB.velocity = movement * _movementForce;
 
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            direction += new Vector3(0, -0.1f, 0);
-        }
+        Vector2 newVelocity = new Vector2(horizontalMovement, _playerRB.velocity.y + verticalMovement);
 
-        direction.Normalize();
+        //Debug.Log($"{_playerRB.velocity.y}");
+        _playerRB.velocity = newVelocity;
 
-        _playerTransform.position += direction * _movementForce * Time.deltaTime;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision!");
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlatformerGround"))
+        {
+            Debug.Log("Player touche le sol");
+
+        }
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("Je me désactive.");
+    }
+
+
 }
