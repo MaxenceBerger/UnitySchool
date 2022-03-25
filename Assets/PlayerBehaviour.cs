@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -14,9 +15,13 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField]
     private int _totalRemainingJumps = 2;
 
+// [SerializeField]
+// private Canvas _canvasDead;
+
     private PlayerState _currentState;
 
     private int _currentRemainingJumps;
+    public GameObject gameOverUI;
 
     // Start is called before the first frame update
     private void Start()
@@ -79,9 +84,10 @@ public class PlayerBehaviour : MonoBehaviour
             _currentState = PlayerState.IsGrounded;
             _currentRemainingJumps = _totalRemainingJumps;
         }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("GroundKillPlayer")) {
-            
-        Debug.Log("Mort");
+        if (collision.gameObject.layer == LayerMask.NameToLayer("GroundKillPlayer"))
+        {
+            Debug.Log("Mort");
+            gameObject.SetActive(false);
         }
     }
 
