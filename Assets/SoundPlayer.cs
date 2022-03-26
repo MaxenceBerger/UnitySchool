@@ -16,7 +16,6 @@ public class SoundPlayer : MonoBehaviour
 
     private void PlayCoinSound()
     {
-        Debug.Log("PlayCoinSound");
         fxAudioSource.clip = gameSoundData.CoinSound;
         fxAudioSource.Play();
     }

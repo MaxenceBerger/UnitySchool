@@ -22,8 +22,6 @@ public class GameManager : MonoBehaviour
     public void AddACoin()
     {
         _coinsCollected++;
-        Debug.Log($"Tu as {_coinsCollected} pi�ce(s)");
-
         OnCoinCollected?.Invoke();
     }
 
